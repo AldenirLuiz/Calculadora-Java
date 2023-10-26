@@ -4,14 +4,11 @@
  */
 package calculadora;
 
-import static java.lang.Integer.sum;
-import java.lang.reflect.Array;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -89,7 +86,7 @@ public class FXMLDocumentController implements Initializable {
             
             case "Button[id=btEval, styleClass=button]'='":
                 labelOperation.setText(textLb+textDp);
-                String result = concat(labelOperation.getText());
+                String result = conceptOPeration(labelOperation.getText());
                 display.setText("="+result);
                 labelTotal.setText(result);
                 break;
@@ -97,6 +94,10 @@ public class FXMLDocumentController implements Initializable {
                 labelOperation.setText("0");
                 display.setText("0");
                 labelTotal.setText("=000");
+            case "Button[id=btDel, styleClass=button]'<'":
+                int endText = textDp.length()-1;
+                String displayable = textDp.substring(0, endText);
+                display.setText(displayable);
         }
     }
     
@@ -158,7 +159,8 @@ public class FXMLDocumentController implements Initializable {
         return value;
     }
     
-    private String concat(String expressao){
+    private String conceptOPeration(String expressao){
+        
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("js"); // Usando o mecanismo de script JavaScript
         Object resultado = null;
