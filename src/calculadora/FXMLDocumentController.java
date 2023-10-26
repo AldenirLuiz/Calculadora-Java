@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,7 +58,13 @@ public class FXMLDocumentController implements Initializable {
     private Label labelTotal;
     @FXML
     private Button btClear;
+    @FXML
+    private Button btPct;
     
+    @FXML
+    private void exit(ActionEvent event){
+        System.exit(0);
+    }
     
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -91,13 +98,19 @@ public class FXMLDocumentController implements Initializable {
                 labelTotal.setText(result);
                 break;
             case "Button[id=btClear, styleClass=button]'C'":
+                dpValues.set(0, "");
+                dpValues.set(1, "");
                 labelOperation.setText("0");
                 display.setText("0");
-                labelTotal.setText("=000");
+                labelTotal.setText("000");
+                break;
             case "Button[id=btDel, styleClass=button]'<'":
                 int endText = textDp.length()-1;
                 String displayable = textDp.substring(0, endText);
                 display.setText(displayable);
+            case "Button[id=btPct, styleClass=button]'%'":
+                catchPercent(textDp, textLb);
+                break;
         }
     }
     
@@ -157,6 +170,19 @@ public class FXMLDocumentController implements Initializable {
             value += i;
         }
         return value;
+    }
+    
+    private void catchPercent(String textDp, String textLb){
+        int pct = Integer.parseInt(textDp);
+        String resul = conceptOPeration(textLb.substring(0, textLb.length()-1));
+        float resFinal = percent(Float.parseFloat(resul), pct);
+        display.setText("="+conceptOPeration(textLb+resFinal));
+        labelOperation.setText(textLb+resFinal);
+    }
+    
+    private float percent(float value, int perSize){
+        float percentage = (value / 100) * perSize;
+        return percentage;
     }
     
     private String conceptOPeration(String expressao){
